@@ -1,0 +1,733 @@
+'''
+#e3.1DayDayUp365.py
+import math
+dayup = math.pow((1.0 + 0.001), 365)
+daydown = math.pow((1.0 - 0.001), 365)
+print("向上: {:.2f}, 向下: {:.2f}.".format(dayup,daydown))
+'''
+
+'''
+#e3.2DayDayUp365.py
+import math
+number = 0.005
+dayup = math.pow((1.0 + number), 365)
+daydown = math.pow((1.0 - number), 365)
+print("向上: {:.2f}, 向下: {:.2f}.".format(dayup,daydown))
+'''
+
+'''
+#daydayupQ3
+dayup = 1.0
+dayfactor = 0.01
+for i in range(365):
+    if i % 7 in [0,6]:
+        dayup = dayup * (1 - dayfactor)
+    else:
+        dayup = dayup * (1 + dayfactor)
+print("向上5天向下2天的力量: {:.2f}.".format(dayup))
+'''
+
+'''
+#daydayupQ4
+def Dayup(df):
+    dayup = 1
+    for i in range(365):
+        if i % 7 in [0, 6]:
+            dayup = dayup * (1 - 0.01)
+        else:
+            dayup = dayup * (1 + df)
+    return dayup
+dayfactor = 0.01
+while Dayup(dayfactor) < 37.78:
+    dayfactor += 0.001
+print("工作日的努力参数为: {:.3f}".format(dayfactor))
+'''
+
+'''
+#weeknameprint_1.py
+weekstr = "星期一星期二星期三星期四星期五星期六星期天"
+weekid = eval(input("请输入星期数(1—7): "))
+pos = (weekid - 1) * 3
+weekaddr = weekstr[pos: pos + 3]
+print(weekaddr)
+'''
+
+'''
+#weeknameprin_2.py
+weekstr = "一二三四五六天"
+weekid = eval(input("请输入星期数(1—7): "))
+print("星期" + weekstr[weekid - 1])
+'''
+
+'''
+#Textprogress Bar.py
+import time
+scale = 10
+print("------执行开始------")
+for i in range(scale+1):
+    a, b = '*' * i, '.' * (scale - i)
+    c = (i/scale) * 100
+    print("{:^3.0f}%[{}->{}]".format(c,a,b))
+    time.sleep(0.1)
+print("------执行结束------")
+'''
+
+'''
+#TextProngressBar.py
+import time
+for i in range(101):
+    print("\r{:3}%".format(i), end="")
+    time.sleep(0.1)
+'''
+
+'''
+#TextProngressBar_3.py
+import time
+scale = 50
+print("执行开始".center(scale//2, "-"))
+start = time.perf_counter()
+for i in range(scale+1):
+    a, b = '*' * i, '.' * (scale - i)
+    c = (i/scale) * 100
+    dur = time.perf_counter() - start
+    print("\r{:^3.0f}%[{}->{}]{:.2f}s".format(c, a, b, dur), end="")
+    time.sleep(0.1)
+print("\n"+"执行结束".center(scale//2, "-"))
+'''
+
+'''
+weight = eval(input("请输入体重(kg): "))
+weight_earth, weight_moon = 0.0, 0.0
+for i in range(10):
+    weight_earth = weight + 0.5
+weight_moon += weight_earth*0.165
+print("未来十年在地球和月球上的体重为: {:.2f}kg, {:.2f}kg".format(weight_earth, weight_moon))
+'''
+
+'''
+def stay (x):   #模型函数
+    dayup = 1.00     #初始水平值
+    day = 0    #10天休息一天
+    cycle = 0  #周期
+    for i in range(365):
+        if day==x or cycle ==7:    #10天休息一天，重新开始计算天数,7天为一周期
+            day = 0
+            cycle = 0
+        else:
+            if day%7 in [3,4,5,6]:     #后四天能力增长
+                dayup = dayup * (1+0.01)
+                day = day +1
+            else:
+                day = day + 1
+    cycle = cycle + 1
+    print("每{}天休息一天365天后能力值：{:.2f}".format(x,dayup))
+stay(10) #调用模型函数
+stay(15)
+'''
+
+'''
+n = input("请输入一个五位数: ")
+if not(int(n) > 9999 or int(n) < 99999):
+    print("输入错误")
+if (n == n[::-1]):
+    print("{}是回文".format(n))
+else:
+    print("{}不是回文".format(n))
+'''
+
+'''
+#CalBMI.py
+height, weight = eval(input("请输入身高(米)和体重\(公斤)[逗号隔开]: "))
+bmi = weight / pow(height, 2)
+print("BMI数值为{:.2f}".format(bmi))
+who, bom = "", ""
+if bmi < 18.5:
+    who, bom = "偏瘦", "偏瘦"
+elif 18.5 <= bmi <24:
+    who, bom = "正常", "正常"
+elif 24 <= bmi <25:
+    who, bom = "正常", "偏胖"
+elif 25 <= bmi <28:
+    who, bom = "偏胖", "偏胖"
+elif 28 <= bmi <30:
+    who, bom = "偏胖", "肥胖"
+else:
+    who, bom = "肥胖", "肥胖"
+print("BMI指标为:国际'{}', 国内'{}'".format(who, bom))
+'''
+
+'''
+#CalPi.py
+from random import random
+from math import sqrt
+from time import perf_counter
+DARTS = 1000 * 1000
+hits = 0.0
+start = perf_counter()
+for i in range(1,DARTS + 1):
+    x, y = random(), random()
+    dist = sqrt(x**2 + y**2)
+    if dist <= 1.0:
+        hits = hits + 1
+Pi = 4*(hits / DARTS)
+print("Pi的值为: {}".format(Pi))
+print("运行时间是: {:.5f}s".format(perf_counter() - start))
+'''
+
+'''
+from random import*
+x = randint(0, 9)
+n = 0
+while True:
+    n += 1
+    j = eval(input("请输入0~9之间的一个整数: "))
+    if j > x:
+        print("遗憾，太大了")
+    elif j < x:
+        print("遗憾，太小了")
+    else:
+        print("预测{}次，你猜中了！".format(n))
+        break
+'''
+
+'''
+str = input("请输入一行字符: ")
+a, b, c, d = 0, 0, 0, 0
+for i in str:
+    if 'a'<=i<='z' or 'A'<=i<='Z' or '\u4E00'<=i<='\u9FFF':
+        a += 1
+    elif '0'<=i<='9':
+        b += 1
+    elif i == ' ':
+        c += 1
+    else:
+        d += 1
+print("在这串字符串中有{}个字母，{}个数字， {}个空格，{}个其他字符。".format(a, b, c, d))
+'''
+
+'''
+def gcd(m,n):  #辗转相除法求公约数
+  r = m % n
+  while r != 0:
+    m = n
+    n = r
+    r = m % n
+  return n
+m , n = eval(input("请输入两个整数（用逗号隔开）："))
+x = gcd(m,n)
+y = m*n/x
+print("{},{}的最大公约数是{},最小公倍数是{}".format(m,n,x,y))
+'''
+
+
+'''
+from random import*
+x = randint(0, 100)
+n = 0
+while True:
+    n += 1
+    j = eval(input("请输入0~100之间的一个整数: "))
+    if j > x:
+        print("遗憾，太大了")
+    elif j < x:
+        print("遗憾，太小了")
+    else:
+        print("预测{}次，你猜中了！".format(n))
+        break
+'''
+
+'''
+from random import*
+x = randint(0, 100)
+n = 0
+while True:
+    n += 1
+    try:
+        j = eval(input("请输入0~100之间的一个整数: "))
+    except NameError:
+        print("输入值必须为整数！")
+        j = eval(input("请输入0~100之间的一个整数: "))
+    if type(j) == float:
+        break
+    else:
+        if j > x:
+            print("遗憾，太大了")
+        elif j < x:
+            print("遗憾，太小了")
+        else:
+            print("预测{}次，你猜中了！".format(n))
+            break
+'''
+
+'''
+
+import random
+total = 10000#测试次数
+win1 = 0   #不转换的胜利次数
+win2 = 0   #转换的胜利次数
+for i in range(total):
+    choice = random.randint(1,3)  #从1到3中任选一个数，每个数代表一个门
+    car = random.randint(1,3)    #车所在的门
+    if choice==car:
+        win1 += 1
+    else:
+        win2 += 1
+print("若不更改门，获胜概率为{:.3}%.".format((win1/total)*100))
+print("若更改门，获胜概率为{:.3}%.".format((win2/total)*100))
+'''
+
+
+'''
+import turtle, time
+def drawGap():
+    turtle.penup()
+    turtle.fd(5)
+def drawLine(draw):
+    drawGap()
+    turtle.pendown() if draw else turtle.penup()
+    turtle.fd(40)
+    turtle.right(90)
+def drawDigit(digit):
+    drawLine(True) if digit in [2, 3, 4, 5, 6, 8, 9] else drawLine(False)
+    drawLine(True) if digit in [0, 1, 3, 4, 5, 6, 7, 8, 9] else drawLine(False)
+    drawLine(True) if digit in [0, 2, 3, 5, 6, 8, 9] else drawLine(False)
+    drawLine(True) if digit in [0, 2, 6, 8] else drawLine(False)
+    turtle.left(90)
+    drawLine(True) if digit in [0, 4, 5, 6, 8, 9] else drawLine(False)
+    drawLine(True) if digit in [0, 2, 3, 5, 6, 7, 8, 9] else drawLine(False)
+    drawLine(True) if digit in [0, 1, 2, 3, 4, 7, 8, 9] else drawLine(False)
+    turtle.left(180)
+    turtle.penup()
+    turtle.fd(20)
+def drawDate(date):
+    turtle.pencolor("red")
+    for i in date:
+        if i == '-':
+            turtle.write('年', font=("Arial", 18, "normal"))
+            turtle.pencolor("green")
+            turtle.fd(40)
+        elif i == '=':
+            turtle.write('月', font=("Arial", 18, "normal"))
+            turtle.pencolor("blue")
+            turtle.fd(40)
+        elif i == '+':
+            turtle.write('日', font=("Arial", 18, "normal"))
+        else:
+            drawDigit(eval(i))
+def main():
+    turtle.setup(800, 350, 200, 200)
+    turtle.penup()
+    turtle.fd(-300)
+    turtle.pensize(5)
+    drawDate(time.strftime("%Y-%m=%d+", time.gmtime()))
+    turtle.hideturtle()
+    turtle.done()
+main()
+'''
+
+'''
+def rvs(s):
+    if s == "":
+        return s
+    else:
+        return rvs(s[1:]) + s[0]
+str = input("请输入字符串: ")
+print(rvs(str))
+'''
+
+'''
+#汉诺塔的实现
+count = 0
+def hanoi(n, src, dst, mid):
+    global  count
+    if n == 1:
+        print("{}:{}->{}".format(1, src, dst))
+        count += 1
+    else:
+        hanoi(n - 1, src, dst, mid)
+        print("{}:{}->{}".format(n, src, dst))
+        count += 1
+        hanoi(n - 1, mid, dst, src)
+num = eval(input("请输入圆盘个数: "))
+STR, DST, MID = map(str, input("请输入首盘、终盘和中间盘: ").split())
+hanoi(num, STR, DST, MID)
+print("执行次数: {}".format(count))
+'''
+
+'''
+#kochdraw_1.py
+import turtle
+def koch(size, n):
+    if n == 0:
+        turtle.fd(size)
+    else:
+        for angle in [0, 60, -120, 60]:
+            turtle.left(angle)
+            koch(size/3, n-1)
+def main():
+    turtle.setup(600, 600)
+    turtle.penup()
+    turtle.goto(-200, -100)
+    turtle.pendown()
+    turtle.pensize(2)
+    level = 3
+    koch(400, level)
+    turtle.right(120)
+    koch(400, level)
+    turtle.right(120)
+    koch(400, level)
+    turtle.hideturtle()
+    turtle.done()
+main()
+'''
+
+'''
+def tian(n):
+    a = 5 * n + 1
+    for i in range(1, a + 1):
+        if i % 5 == 1:
+            print("+----" * n + "+")
+        else:
+            print("|    " * n + "|")
+def main():
+    n = 5       #n代表几乘几的格子数
+    tian(n)
+main()
+'''
+
+'''
+def isOdd(n):
+    if n % 2 != 0:
+        return True
+    else:
+        return False
+print(isOdd(eval(input("请输入一个整数: "))))
+'''
+
+'''
+def isNum(str):
+    try:
+        n = eval(str)
+        if type(n) == int or type(n) == float or type(n) == complex:
+            return True
+        else:
+            return False
+    except:
+        print("输入错误！")
+print(isNum(input("请输入一个字符串: ")))
+'''
+
+'''
+def multi(a, *b):
+    for i in b:
+        a *= i
+    return a
+print(multi(1, 2, 3, 4))
+'''
+
+'''
+def isprime(): # 判断一个输入是否为素数
+    n = input("请输入一个整数： ")
+    try:
+        n = eval(n) # 若输入不为数字则报错
+        if type(n) == int: # 判断为整数
+            if n > 1 :# 判断素数
+                for i in range(2,n):
+                    if n % i == 0: #遍历除法，若能被整除即不为素数
+                        print("False") # 第一次被整除后就跳出
+                        break
+                else:
+                    print("True")
+            else: # 小于1的必然不是素数
+                print("False")
+        else:
+            print("False")
+    except:
+        print("输入错误")
+isprime()
+'''
+
+'''
+import datetime
+bir = datetime.datetime(2001, 10, 19)
+print(bir.strftime("%Y-%m-%d"))
+print(bir.strftime("%Y-%B-%d"))
+print(bir.strftime("%Y-%b-%d"))
+print(bir.strftime("%x"))
+print(bir.strftime("%Y-%m-%d"))
+'''
+
+'''
+S1 = [2, 5, 7, 1, 6]
+S1 = sorted(S1)   #升序
+print(S1)
+S1 = sorted(S1,reverse=True)   #降序
+print(S1)
+
+S1 = [2, 5, 7, 1, 6]
+S1.sort()
+print(S1)
+S1.sort(reverse=True)
+print(S1)
+'''
+
+'''
+#CalStatistics_1.py
+def getNnm():
+    nums = []
+    iNumStr = input("请输入数字(回车退出): ")
+    while iNumStr != "":
+        nums.append(eval(iNumStr))
+        iNumStr = input("请输入数字(回车退出): ")
+    return nums
+
+def mean(numbers):
+    sum = 0.0
+    for n in numbers:
+        sum += n
+    return sum/len(numbers)
+
+def dev(numbers, mean):
+    sdev = 0.0
+    for num in numbers:
+        sdev += (num - mean)**2
+    return pow(sdev / (len(numbers) - 1), 0.5)
+
+def median(numbers):
+    sorted(numbers)
+    size = len(numbers)
+    if size % 2 == 0:
+        med = (numbers[size // 2 - 1] + numbers[size // 2])/2
+    else:
+        med = numbers[size // 2]
+    return med
+n = getNnm()
+m = mean(n)
+print("平均值:{},方差:{:.2},中位数:{},最大值是:{},最小是是:{}.".format(m, dev(n, m), median(n), max(n), min(n)))
+'''
+
+'''
+#eCalHamlet.py
+def getText():
+    txt = open("hamlet.txt", "r").read()
+    txt = txt.lower()
+    for ch in '!"#$%&()*+-,./:;<=>?@[\\]^_`{|}~':
+        txt = txt.replace(ch, " ")
+    return txt
+hamletTxt = getText()
+words = hamletTxt.split()
+counts = {}
+for word in words:
+    counts[word] = counts.get(word, 0) + 1
+items = list(counts.items())
+items.sort(key = lambda x:x[1], reverse = True)
+for i in range(10):
+    word, count = items[i]
+    print("{0:<10}{0:>5}".format(word, count))
+'''
+
+
+'''
+import random
+l = []
+m = []
+for i in range(10):
+    l.append(str(i))
+for i in range(65, 91):
+    l.append(chr(i))
+for i in range(97, 123):
+    l.append(chr(i))
+for i in range(10):
+    for j in range(8):
+        m.append(random.choice(l))
+    print("".join(m))
+    m = []
+'''
+
+'''
+def find(l):
+    if len(l) != len(set(l)):
+        print("False")
+    else:
+        print("True")
+list = []
+list = input("请输入一些元素：")
+while len(list) == 0:
+    list = input("输入为空，请再次输入一些元素：")
+print(find(list))
+'''
+
+'''
+def getText(str):
+    counts = {}#创建字典
+    if '\u4E00'<=str<='\u9FFF':
+        str = str
+    else:
+        str = str.split()
+    for word in str:
+        counts[word] = counts.get(word,0) + 1#字典单词为键，已经有这个键的话就把相应的值加1，没有的话就取值为0，再加1
+        items = list(counts.items())  #将字典类型转换为list类型
+        items.sort(key=lambda x:x[1], reverse=True)  #按照count的数值倒序排列
+    for i in range(10):
+        word, count = items[i]
+        print ("{0:<10}{1:>5}".format(word, count))
+str = """
+Here With You
+To all my friends
+The night is young
+The music’s loud
+They playing our song
+Nowhere else that I belong
+Than here with you
+Than here with you
+"""
+getText(str)
+str = """对我所有好友来讲夜未央乐未殇他们在我们喜爱的歌声里欢畅我只想和你在此相伴不想去任何其他地方有你相伴就是天堂有你相伴就是天堂
+"""
+getText(str)
+'''
+
+'''
+import random
+men = 1000
+same = 0
+birthday = []
+for i in range(men):
+    for j in range(23):
+        birthday.append(random.randint(1, 365))
+    if len(birthday) == len(set(birthday)):
+        same += 1
+    birthday = []
+same = same/men
+print("23人中至少两人生日相同的概率是：{:.3}%".format(same * 100))
+'''
+
+'''
+#AutoTraceDraw.py
+import turtle as t
+t.title('自动轨迹绘制')
+t.setup(800, 600, 0, 0)
+t.pencolor("red")
+t.pensize(5)
+#数据读取
+datals = []
+f = open("C:/data.txt")
+for line in f:
+    line = line.replace("\n", "")
+    datals.append(list(map(eval, line.split(","))))
+f.close()
+#自动绘制
+for i in range(len(datals)):
+    t.pencolor(datals[i][3], datals[i][4], datals[i][5])
+    t.fd(datals[i][0])
+    if datals[i][1] == 1:
+        t.right(datals[i][2])
+    else:
+        t.left(datals[i][2])
+t.hideturtle()
+t.done()
+'''
+
+'''
+f = open("D:/test.txt", "r+")
+l = input("请输入数据：")
+ls = list(l.split(","))
+f.writelines(ls)
+f.seek(0)
+for line in f:
+    print(line)
+f.close()
+'''
+
+'''
+ls = ['中国', '美国', '俄罗斯']
+txt = open("D:/test.txt", "w")
+txt.write(' '.join(ls))
+txt.close()
+txt = open("D:/test.txt", "r")
+t = []
+t = txt.read()
+print(t)
+txt.close()
+'''
+
+'''
+ls = ['北京', '101.5', '120.7', '121.4']
+f = open("D:/test.CSV", "w")
+f.write(','.join(ls) + '\n')
+f.close()
+'''
+
+'''
+ls = [['城市', '环比', '同比', '定基'], ['北京', '101.5', '120.7', '121.4'],['上海', '101.2', '127.3', '127.8'], ['广州', '101.3', '119.4', '120']]
+f = open("D:/test.CSV", "w")
+for item in ls:
+    f.write(','.join(item) + '\n')
+f.close()
+'''
+
+'''
+f = open("D:/test.CSV", "r")
+ls = []
+for line in f:
+    line = line.replace('\n', '')
+    ls.append(line.split(','))
+print(ls)
+'''
+
+'''
+#体育竞技分析
+from random import random
+def printIntro():
+    print("这个程序模拟两个选手A和B的某种竞技比赛")
+    print("程序运行需要A和B的能力值(以0到1之间的小数表示)")
+
+def getInputs():
+    a = eval(input("请输入A选手的能力值(0到1)："))
+    b = eval(input("请输入B选手的能力值(0到1)："))
+    n = eval(input("请输入比赛次数："))
+    return a, b, n
+
+def simNGame(n, probA, probB):
+    winsA, winsB = 0, 0
+    for i in range(n):
+        scoreA, scoreB = simOneGame(probA, probB)
+        if scoreA > scoreB:
+            winsA += 1
+        else:
+            winsB += 1
+    return winsA, winsB
+
+def simOneGame(probA, probB):
+    scoreA, scoreB = 0, 0
+    serving = "A"
+    while not gameOver(scoreA, scoreB):
+        if serving == "A":
+            if random() < probA:
+                scoreA  += 1
+            else:
+                serving = "B"
+        else:
+            if random() < probB:
+                scoreB += 1
+            else:
+                serving = "A"
+    return scoreA, scoreB
+
+def gameOver(a, b):
+    return a == 15 or b == 15
+
+def printSummary(winsA, winsB):
+    n = winsA + winsB
+    print("竞技分析开始，共模拟{}场比赛".format(n))
+    print("选手A获胜{}场比赛，占比{:0.1%}".format(winsA, winsA/n))
+    print("选手B获胜{}场比赛，占比{:0.1%}".format(winsB, winsB / n))
+
+def main():
+    printIntro()
+    probA, probB, n = getInputs()
+    winsA, winsB = simNGame(n, probA, probB)
+    printSummary(winsA, winsB)
+
+main()
+'''
