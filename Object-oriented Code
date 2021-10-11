@@ -1,0 +1,3076 @@
+#---------------------类的定义---------------------
+'''
+#定义一个类
+class Complex:
+    pass
+
+one = Complex()
+print(one)#one.print也可以实现
+print(one.__class__)#该对象的类
+print(Complex)#Complex.print也可以实现
+print(Complex.__name__)#Complex.__name__.print
+xxx = Complex
+print(xxx)
+print(xxx.__name__)
+Complex = 666
+print(Complex)#证明Complex是类名可改变的变量
+'''
+
+#---------------------属性相关---------------------
+'''
+#1、定义一个类
+class Person:
+    pass
+
+#2、根据类，创建一个对象
+p = Person()
+
+#3、给对象p增加一些属性
+p.age = 18
+p.height = 180
+p.age = 123#修改p.age属性
+
+#4、验证是否增加成功(查)
+print(p.age)#直接输出p的age属性值
+print(p.__dict__)#通过这种方式生成字典类型键值对来查看属性关系
+
+#5、测试对象属性的覆盖以及id(改、增)
+p.pets = ['小花', '小红']
+print(p.pets, id(p.pets))#输出对象p的pets的属性值及id
+p.pets.append('小明')#因为pets是列表，可以用append加入元素，访问操作，不增加新空间
+print(p.pets, id(p.pets))#输出对象p的pets的属性值(加入新元素后的)及id，会发现id没有改变
+p.pets = [1, 2, 3]#覆盖原数据
+print(p.pets, id(p.pets))#输出覆盖后的属性值及id，会发现id改变了
+
+#6、删除对象属性(删)
+#普通变量删除：
+num = 10
+print(num)
+del num
+print(num)
+
+p.num = 10
+del p.num
+print(p.num)
+
+#对象之间的界限
+p1 = Person()
+p2 = Person()
+p1.age = 18
+p2.address = "上海"
+print(p1.address)#对象p1没有该属性，也可以说不能通过p1访问p2的属性
+'''
+
+
+#---------------------类属性的操作---------------------
+'''
+#方法一：
+class Money:
+    pass
+
+Money.count = 10
+Money.age = 18
+Money.num = 666
+print(Money.count)
+print(Money.__dict__)#键值对中还包含类中的一些属性
+'''
+
+'''
+#方法二；
+class Money:
+    count = 10
+    age = 18
+    num = 666
+#通过类访问
+# print(Money.count)
+# print(Money.age)
+# print(Money.num)
+# print(Money.__dict__)
+#通过对象访问
+one = Money()
+# print(one.count)
+# print(one.age)
+# print(one.num)
+# print(Money.__dict__)
+
+# class Test:
+#     sex = "男"
+#
+# one.__class__ = Test#将one的实例化对象Money改为类Test的对象
+# print(one.__class__)
+# #print(one.age)#one所指对象的类已经修改，不含age
+# print(one.sex)
+# one.sex = "女"
+# print(one.sex)#当one所指对象有sex属性即从自身查找，不从类中查找
+
+#修改一个类属性
+# Money.age = 22
+# print(Money.age)
+
+#删除一个类属性
+#del Money.age
+#del one.age
+#print(Money.age)
+#print(one.age)#会发现无法通过对象删除类属性
+
+
+# class Money:
+#     pass
+#
+# # one = Money()
+# # # one.age = 18
+# # # one.height = 180
+# # # one.age = 19
+# # # print(one.__dict__)
+# #
+# # one.__dict__ = {"name": "Sz", "age": 18}#一般对象可以直接修改__dict__属性
+# # print(one.name)
+
+class Money:
+    name = "sz"
+    age = 18
+
+# #Money.__dict__ = {"sex": "男"}
+# Money.__dict__["age"] = 20
+# print(Money.age)#类对象__dict__只提供只读功能，不能修改属性
+# print(Money.__dict__)
+
+#类对象各个属性共享
+one = Money()
+two = Money()
+print(one.age)
+print(two.age)
+Money.age = 20
+print(one.age)
+print(two.age)
+'''
+#---------------------理解对象和类的属性查询机制---------------------
+# class Person:
+#     age = 10
+#
+# p = Person()
+# p.age += 5#可理解为p.age = p.age + 5，而计算时先算等号右边，故选访问等号右边的p.age，又因为p对象中没有，则引用类中的10
+#
+# print(Person.age)
+# print(p.age)
+'''
+#---------------------限制对象添加属性用__slots__---------------------
+class Person:
+    __slots__ = ["age"]#限制对象添加的属性只能是age
+
+p1 = Person()
+p1.age = 10
+print(p1.age)
+p1.num = 20
+print(p1.num)#会发现报错，因为类中已经限制了对象只能添加属性age
+
+p2 = Person()#同一个类的其他对象也是如此
+p2.a= 10
+p2.b = 10
+print(p2.a)
+print(p2.b)
+'''
+
+#---------------------方法的概念和作用---------------------
+'''
+def eat():
+    print(1)
+    print(2)
+    print(3)
+eat()#函数的调
+
+class Person:
+    def eat1(self):#实例方法
+        print(1)
+        print(2)
+        print(3)
+
+p = Person()
+p.eat1()#这种在类内定义一个函数，并定义对象对该函数进行调用，称作方法
+'''
+
+'''
+class Person:
+    def eat(self):
+        print("这是一个实例方法", self)#通过print，self表示实例，意味着默认第一个参数需要接收到一个实例
+
+    @classmethod
+    def leifangfa(cls):
+        print("这是一个类方法", cls)#通过print，cls表示类，意味着默认第一个参数需要接收到一个类
+
+    @staticmethod
+    def jingtaifangfa():
+        print("这是一个静态方法")#通过print，没有输出，表示第一个参数啥也不默认接收
+
+p = Person()
+# p.eat()
+# p.leifangfa()
+# p.jingtaifangfa()#三种调用都成功
+
+# Person.eat()#报错，表明实例方法默认第一个参数需要接收到一个实例
+# Person.leifangfa()
+# Person.jingtaifangfa()
+
+def run():
+    print("run")
+
+p.a = run#函数也可以作为属性存储在字典里面，因为它也占用空间，这就说明我什么方法可以存储在字典里面
+print(p.__dict__)
+print(Person.__dict__)#表明不论是什么方法，都是存储在类里面的
+'''
+
+'''
+#---------------------实例方法---------------------
+class Person:
+    def eat(self, food):
+        print("eat", food)
+
+    def eat1(self, food):
+         print("eat", self, food)
+
+    def eat2(xxx):
+        print(xxx)
+
+    def eat3():
+        print("eat")
+
+#标准调用
+p = Person()
+# p.eat("tomato")#会发现解释器自动帮我们传了第一个实例参数，这里只需要我们自行输入第二个参数的值就可以，不用去管第一个参数的传递
+#
+# p.eat1("tomato")#会发现解释器传的第一个实例参数self，就是实例p本身
+# print(p)
+
+#类调用
+# Person.eat1("potato")#会发现报错，因为实例方法使用类调用第一个参数不能像上面传实例p那样传一个类Person，所以需要用户自行输入第一个参数
+# Person.eat1(123, "potato")#本质还是调用函数本身，并没有多大意义
+
+#间接调用
+# func = Person.eat1
+# func(123, "potato")#会发现这种调用方法和上面的类调用方法一样，都要自行输入第一个参数给self，执行时eat也还是会出现
+#当我们编写代码做好还是用标准调用
+
+p.eat2()#会发现输出了实例，这表示self只是起名称作用，参数名称不是定死是self，但规范第一个名称叫self
+p.eat3()#会报错，因为该函数()内无形参，表示 根本不用参数，而实例调用却传了一个实例p给它，由此可以看出实例调用解释器会自动传参
+'''
+
+'''
+#---------------------类方法---------------------
+class Person:
+    @classmethod#装饰器的作用：在保证原本函数不改变的前提下，直接给这个函数增加一些功能
+    def leifangfa(cls, a):
+        print("lei", cls, a)
+
+#类调用：
+Person.leifangfa(123)#会提示只用填入a的实参信息，cls已经由解释器传递了
+#实例调用：
+p = Person()
+p.leifangfa(666)#会发现提示也是只用填入a的实参信息，cls也已经由解释器传递了，因为实例调用类方法会自动忽略实例而去找它对应的类
+#间接调用：
+func = p.leifangfa
+func(777)#与上面相似
+
+class A(Person):
+    pass
+
+A.leifangfa(123)#通过继承会发现第一个参数传的是新类A，而A又继承了Person的类方法
+'''
+
+'''
+#---------------------静态方法---------------------
+class Person:
+    @staticmethod
+    def jingtai():
+        print("静态")
+
+#类调用：
+Person.jingtai()
+#实例调用：
+p = Person()
+p.jingtai()
+#间接调用：
+func = p.jingtai
+func()
+'''
+
+'''
+#---------------------不同类型的方法访问不同类型的属性---------------------
+class Person:
+    age = 0
+    def shilifangfa(self):
+        print(self)
+        print(self.age)
+        print(self.num)
+    @classmethod
+    def leifangfa(cls):
+        print(cls)
+        print(cls.age)
+        print(cls.num)#不能通过类方法访问实例属性
+    @staticmethod
+    def jingtaifagnfa():
+        print(Person.age)
+        print(p.num)
+
+p = Person()
+p.num = 10
+# p.age = 15
+
+# #通过实例方法来访问各属性
+# p.shilifangfa()#可以通过实例方法访问类属性和实例属性,但是当实例中有与类相同的属性时，访问的时实力的属性
+
+# #通过类方法来访问各属性
+# p.leifangfa()#可以通过类方法访问类属性，但是不能通过类方法访问实例属性
+# Person.leifangfa()#与上面实例调用一样
+
+# #通过静态方法来访问各属性
+# Person.jingtaifagnfa()#通过类调用来使用静态方法访问各属性，但是不通过第一个参数.属性来访问了，因为静态方法不传参数，所以必须精确到类/实例.属性
+# p.jingtaifagnfa()#与上面的类调用一样
+
+# #类属性
+# print(Person.age)
+# print(p.age)
+# #实例属性
+# print(p.num)
+# #print(Person.num)#无法实现类访问实例属性
+'''
+
+'''
+
+#---------------------补充(元类)---------------------
+num = 10
+print(num.__class__)#类为int
+
+s = "123"
+print(s.__class__)#类为str
+
+class Person:
+    pass
+
+p = Person()
+print(p.__class__)#类为Person
+
+#那么这些类对象的类是什么？
+print(num.__class__.__class__)#或print(int.__class__)
+print(s.__class__.__class__)#或print(str.__class__)
+print(p.__class__.__class__)#或print(Person.__class__)
+#会发现所有这些类对象的类都是type，type(元类)为大boss
+print(type.__class__)#元类的类还是它本身，即元类是最顶端的
+'''
+
+'''
+#---------------------类对象的创建方式---------------------
+# class Person:
+#     count = 0
+#     def run(self):
+#         pass
+#类对象的标准创建方式
+
+num = 10
+print(type(num))
+
+#使用type()元类函数来创建类对象。!注意是类对象不是实例!
+def run(self):
+    print("---", self)#此函数创建来用于给下面用type创建的类对象当方法
+
+xxx = type("Dog", (), {"count": 0, "run": run})#此处type括号内第一个元素表示类对象的名称，第二个元素()是用来添继承的类的，第三个字典是用来写该类对象内的
+#其中的run在这里充当该类的实例方法，xxx表示元类type
+print(xxx)#显示类对象为Dog
+print(xxx.__dict__)#显示类对象的dict
+'''
+
+'''
+#---------------------类对象的创建流程---------------------
+
+# type#没有定义元类
+# xxx = type(...)#有定义元类为xxx
+
+class Animal:
+    pass
+
+class Person(Animal):
+    # __metaclass__ = xxx#产找该类对像的元类时有继承时会到父类Animal去找，最后，若有自定义元类则为自定义的元类，若没有则是type
+    pass
+'''
+
+'''
+#---------------------类的标准注释方法---------------------
+class Person:
+    """
+    关于这个类的描述，类的作用，类的构造函数等等；类属性的描述
+    Attributes:
+        count: int 代表是人的个数
+    """
+    count = 1
+
+    def run(self, distance, step):
+        """
+        这个方法的作用效果
+        :param distance: 参数的含义，参数的类型int，是否有默认值
+        :param step:
+        :return: 返回的结果的含义(int)，返回的数据的类型int
+        """
+        print("人在跑")
+        return distance / step
+
+help(Person)
+#由此可以查看到类内的一些内容，注释不论是对类还是对方法等，都要在开头就注释
+'''
+
+'''
+# ---------------------不同类型的方法访问不同类型的属性---------------------
+#公有属性访问:
+class Animal:
+    x = 10
+    def test(self):
+        print(Animal.x)
+        print(self.x)
+    pass
+
+class Dog(Animal):
+    def test2(self):
+        print(Dog.x)
+        print(self.x)
+    pass
+
+#类内实例方法访问
+a = Animal()
+# a.test()
+
+#继承类内实例方法访问
+d = Dog()
+# d.test2()
+
+#直接类和实例访问
+print(Animal.x)
+print(Dog.x)
+print(a.x)
+print(d.x)
+
+# 跨模块访问，创建另一个文件通过import来访问属性
+# a = 666
+'''
+
+'''
+#受保护属性访问:
+class Animal:
+    _x = 10#定义_x为受保护属性
+    def test(self):
+        print(Animal._x)
+        print(self._x)
+    pass
+
+class Dog(Animal):
+    def test2(self):
+        print(Dog._x)
+        print(self._x)
+    pass
+
+#类内实例方法访问
+a = Animal()
+# a.test()
+
+#继承类内实例方法访问
+d = Dog()
+# d.test2()
+
+#直接类和实例访问(模块内其他位置访问)会有警告
+print(Animal._x)
+print(Dog._x)
+print(a._x)
+print(d._x)
+#跨模块访问
+# __all__ = ["_a"]
+# _a = 666
+'''
+
+'''
+#私有属性访问:
+class Animal:
+    __x = 10#定义_x为受保护属性
+    def test(self):
+        print(Animal.__x)
+        print(self.__x)
+    pass
+
+
+# print(Animal.__x)
+print(Animal.__dict__)
+print(Animal._Animal__x)#不建议这样访问
+
+class Dog(Animal):
+    def test2(self):
+        print(Dog.__x)
+        print(self.__x)
+    pass
+
+#类内实例方法访问
+a = Animal()
+# a.test()
+
+#继承类内实例方法访问
+d = Dog()
+# d.test2()#错误
+
+#直接类和实例访问(模块内其他位置访问)都会报错
+# print(Animal.__x)
+# print(Dog.__x)
+# print(a.__x)
+# print(d.__x)
+
+#跨模块访问
+# __all__ = ["__a"]
+# __a = 666
+'''
+
+'''
+# ---------------------私有化属性的应用场景---------------------
+class Person:
+    # 主要作用：当我们创建好一个实例对象后，会自动的调用这个方法，来初始化这个对象
+    def __init__(self):
+        self.age = 18
+        self.__num = 10
+    def setNum(self, value):
+        if(isinstance(value, int) and 0 < value < 200):
+            self.__num = value
+        else:
+            print("输入错误，请输入大于0小于200的整数")
+    def getNum(self):
+        return self.__num#不从类外访问私有属性，我们可以在类内定义一个实例方法来访问私有属性
+
+p1 = Person()
+p1.__num = 33#这样不是修改私有属性，通过下面的dict会发现这只是添加了一个属性
+
+# p2 = Person()
+# p3 = Person()
+
+# print(p1.age)
+# print(p2.age)
+# print(p3.age)# 虽然值相同，但这三个属于不同的实例的属性
+print(p1.__dict__)
+print(p1.getNum())
+p1.setNum(20)
+print(p1.getNum())
+'''
+
+# 只读属性方式一
+'''
+# ---------------------只读属性---------------------
+#注意加上object
+class Person(object):
+    def __init__(self):
+        self.__age = 18
+    # def getAge(self):
+    #     return self.__age
+
+    @property#主要的作用是：可以以使用属性的方式，来使用这个方法
+    def age(self):
+        return self.__age
+
+p = Person()
+# print(p.__age)#错误，类外无法访问私有属性
+
+#实例方法只读,但只能实现读取，修改属性的话，实则是在实例内添加了一个新的属性
+# print(p.getAge())
+
+#使用property来达到只读而且修改报错
+print(p.age)#通过装饰器property来达到这种效果
+p.age = 20#会报错，从而通过这种方法达到只读的目的
+'''
+
+'''
+# ---------------------新式类和经典类---------------------
+class Person(object):
+    pass
+
+print(Person.__base__)#Python3.x版本定义一个类时，默认继承(object)，但还是建议在类名后面按照规范写上(object)
+'''
+
+'''
+# ---------------------property在新式类中的使用方式---------------------
+#第一种使用方式：
+# class Person(object):
+#     def __init__(self):
+#         self.__age = 18
+#
+#     def get_age(self):
+#         print("运行get_age")
+#         return self.__age
+#
+#     def set_age(self, value):
+#         print("运行set_age")
+#         self.__age = value
+#
+#     age = property(get_age, set_age)#使得私有属性age可以在类外通过调用函数的方式来输出值和修改值
+#
+# p = Person()
+# print(p.age)
+#
+# p.age = 90#此步运行了set_age函数
+# print(p.age)#会发现age数值已经被修改
+# print(p.__dict__)#发现age不是新增加的属性，而是确确实实被修改后的属性
+
+#第二种使用方式：
+class Person(object):
+    def __init__(self):
+        self.__age = 18
+
+    @property
+    def age(self):
+        print("运行返回值函数")
+        return self.__age
+
+    @age.setter
+    def age(self, value):
+        print("运行设置值函数")
+        self.__age = value
+#名称不一定时age，比如用xxx的话，修改值得是p.xxx=...；输出值得是print(p.xxx)，设置值装饰器得是@xxx.setter
+
+p = Person()
+print(p.age)
+
+p.age = 88
+print(p.age)
+print(p.__dict__)
+'''
+
+'''
+# ---------------------property经典类中的使用方式---------------------
+#Python2.x版本的使用方法，只可以关联到读取方法，写的方法无法关联，建议都使用新式类，具体不演示，可以去查看视频
+'''
+
+'''
+# 只读属性方式二
+# ---------------------只读属性---------------------
+class Person:
+    # 当我们通过" 实例.属性 = 值 "，给一个实例增加一个属性，或者说，修改一下属性值的时候，都会调用这个方法
+    # 在这个方法的内部，才会真正的把这个属性以及对应的数据，给存储到__dict__字典里
+    def __setattr__(self, key, value):
+        print("方法运行，属性名称和值为：", key, value)
+
+        # 1、判定key，是否是我们要设置的只读属性名称
+        if key == "age" and key in self.__dict__.keys():
+            print("这个属性是只读属性，不能设置数据")
+
+        # 2、如果不是只读属性的名称，则真正的给它添加到这个实例里面去
+        else:
+            # self.key = value#这个方法错误，这会进入死循环，一直调用__setattr__(self, key, value)这个方法
+            self.__dict__[key] = value#用此方法直接将数据添加到该实例的字典里
+
+p = Person()
+p.age = 18
+print(p.age)
+print(p.__dict__)
+p.num = 666
+print(p.__dict__)
+p.num = 999#此处执行else条件语句，修改属性num的值
+print(p.__dict__)
+p.age = 33#此处执行if语句，由于age是限定的只读属性，无法修改值
+print(p.__dict__)
+'''
+
+'''
+# ---------------------系统内置的属性---------------------
+class Person:
+    """
+    这是一个人，类
+    """
+    age = 19
+    def __init__(self):
+        self.name = "sz"
+    def run(self):
+        print("run")
+
+# A、__dict__：类的属性
+# B、__bases__：类的所有父类构成元组
+# C、__doc__：类的文档字符串
+# D、__name__：类名
+# E、__module__：类定义所在的模块
+
+print(Person.__dict__)
+print(Person.__bases__)
+print(Person.__doc__)
+print(Person.__name__)
+print(Person.__module__)
+
+p = Person()
+print(p.__class__)
+'''
+
+
+# ---------------------方法相关补充---------------------
+'''
+class Person:
+    __age = 18
+    def __run(self):
+        #定义的这个方法为私有方法
+        print("run")
+
+p = Person()
+p.__run()#无法在类外调用这个私有方法
+'''
+
+'''
+# __str__方法：
+class Person:
+    def __init__(self, n, a):
+        self.name = n
+        self.age = a
+
+    def __str__(self):
+        return "这个人的姓名是：%s，这个人的年龄是：%s"%(self.name, self.age)
+
+p1 = Person("sz", 18)
+# print(p1.name)
+# print(p1.age)
+print(p1)# 使用这种方法获取属性值时，系统先会在类内部寻找是否有__str__(self)这个实例方法，有的话则通过该实例方法里面，用户设置的返回值返回数据
+         # 这样就不用在一个属性一个属性地print将值输出
+
+p2 = Person("张三", 19)
+# print(p2.name)
+# print(p2.age)
+print(p2)
+
+s = str(p1)
+print(s)
+print(type(s))
+print(type(p1))
+'''
+
+'''
+# __repr__方法：
+# class Person:
+#     def __init__(self, n, a):
+#         self.name = n
+#         self.age = a
+#
+#     def __str__(self):
+#         return "这个人的姓名是：%s，这个人的年龄是：%s"%(self.name, self.age)
+#
+#     def __repr__(self):
+#         return "xxxxxxxx"
+#
+# p1 = Person("sz", 18)
+# # print(p1.name)
+# # print(p1.age)
+# # print(p1)
+#
+# p2 = Person("张三", 19)
+# # print(p2.name)
+# # print(p2.age)
+# # print(p2)
+#
+# print(repr(p1))
+
+import datetime
+
+t = datetime.datetime.now()
+print(t)
+print(repr(t))
+tmp = repr(t)
+print(eval(tmp))
+'''
+
+'''
+# ---------------------__call__方法---------------------
+class Person:
+    def __call__(self, *args, **kwargs):
+        print("xxx", args, kwargs)
+
+p = Person()
+p()# 让实例像这样如函数被调用，只需要在类里面定义一个__call__()实例方法即可，在使用这种调用方法时，解释器会自动去类里面找__call__()方法
+p(123, 456, name = "sz", ddd = 666)
+
+# 应用例子：
+# print("创建一个%s这个类型的画笔，它是%s颜色" % ("钢笔", "红色"))
+# print("创建一个%s这个类型的画笔，它是%s颜色" % ("钢笔", "黄色"))
+# print("创建一个%s这个类型的画笔，它是%s颜色" % ("钢笔", "绿色"))
+# 这中方法过于繁杂
+
+# 使用函数来简化：
+# def createPen(p_type, p_color):
+    # print("创建一个%s这个类型的画笔，它是%s颜色" % (p_type, p_color))
+
+# createPen("钢笔", "红色")
+# createPen("钢笔", "黄色")
+# createPen("钢笔", "绿色")
+
+# 还可以进阶使用partial来处理这个函数使其更方便
+# def createPen(p_color, p_type):
+#     print("创建一个%s这个类型的画笔，它是%s颜色" % (p_type, p_color))
+#
+# import functools
+# gangbifunc = functools.partial(createPen, p_type="钢笔")
+# gangbifunc("红色")
+# gangbifunc("黄色")
+# gangbifunc("绿色")
+
+# 再进阶可以用面向对象的方法来实现(用__call__方法)：
+class PenFactory:
+    def __init__(self, p_type):
+        self.p_type = p_type
+
+    def __call__(self, p_color):
+        print("创建一个%s这个类型的画笔，它是%s颜色" % (self.p_type, p_color))
+
+pen = PenFactory("钢笔")
+pen("红色")
+pen("黄色")
+pen("绿色")
+
+pencil = PenFactory("铅笔")
+pencil("蓝色")
+pencil("橙色")
+pencil("紫色")
+'''
+
+'''
+# ---------------------索引操作---------------------
+class Person:
+    def __init__(self):
+        self.cha = {}
+
+    def __setitem__(self, key, value):
+        # print("setitem", key, value)
+        self.cha[key] = value
+
+    def __getitem__(self, item):
+        # print("getitem", item)
+        return self.cha[item]
+
+    def __delitem__(self, key):
+        # print("delitem", key)
+        del self.cha[key]
+
+p = Person()
+p["name"] = "sz"
+
+print(p["name"])
+print(p.cha)
+
+# del p["name"]
+
+# print(p["name"])#已经删除
+# print(p.cha)#会发现字典已经空了
+'''
+
+'''
+# ---------------------切片操作---------------------
+class Person:
+    def __init__(self):
+        self.items = [0, 1, 2, 3, 4, 5, 6, 7]
+
+    def __setitem__(self, key, value):
+        # print(key, value)
+        # print(key.start)
+        # print(key.stop)
+        # print(key.step)
+        # print(value)
+        if isinstance(key, slice):
+            # self.items[key.start: key.stop: key.step] = value
+            self.items[key] = value# 与上面的形式相同
+
+    def __getitem__(self, item):
+        # print("__getitem__", item)
+        return self.items
+
+    def __delitem__(self, key):
+        print("__delitem__", key)
+
+p = Person()
+p[0: 4: 2] = ["a", "b"]
+
+# p[0: 5: 2]
+# del p[0: 5: 2]
+
+# print(p[0: 4: 2])
+print(p.items)
+'''
+
+'''
+# ---------------------比较操作---------------------
+class Person:
+    def __init__(self, age, height):
+        self.age = age
+        self.height = height
+
+    # def __eq__(self, other):# ==判断定
+    #     return self.age == other.age, self.height == other.height
+    #
+    # def __ne__(self, other):# !=判断定
+    #     return self.age != other.age, self.height != other.height
+    #
+    # def __gt__(self, other):# >判断
+    #     pass
+    #
+    # def __ge__(self, other):# >=判断
+    #     pass
+
+    def __lt__(self, other):# <判断
+        print(self.age)
+        print(other.age)
+        return self.age < other.age
+
+    # def __le__(self, other):# <=判断
+    #     pass
+
+p1 = Person(18, 180)
+p2 = Person(17, 180)
+
+# print(p1 == p2)
+# print(p1 != p2)
+
+print(p1 < p2)
+print(p1 > p2)# 调换参数：p2 < p1
+'''
+
+'''
+# ---------------------比较操作~补充---------------------
+import functools
+
+@functools.total_ordering# 此装饰器会自动帮我们补全剩下的比较方法，通过dict可以查看，而且可以实现组合方法的效果
+class  Person:
+    def __lt__(self, other):
+        print("运行lt")
+
+    def __eq__(self, other):
+        print("运行eq")
+
+    # def __le__(self, other):
+    #     print("运行le")
+
+p1 = Person()
+p2 = Person()
+print(Person.__dict__)
+
+print(p1 <= p2)# 没有使用装饰器时，会自动调用le方法
+# 使用了@functools.total_ordering装饰器之后，注释掉le方法，再次输出，会发现运行了lt和eq两个方法，实现了组合方法
+'''
+
+'''
+# ---------------------上下文环境中的布尔值---------------------
+class Person:
+    def __init__(self):
+        self.age = 10
+
+    def __bool__(self):
+        # return True# 返回True时，p实例为真值
+        # return False  # 返回False时，p实例为假值，下面的判断语句后的内容不实现
+        # return self.age >= 18# 规定实例age属性要大于等于十八才返回真值，否则返回假值，下面的判断语句后的内容不实现
+        return self.age <= 18  # 规定实例age属性要小于等于十八才返回真值，否则返回假值，下面的判断语句后的内容不实现
+
+
+p = Person()
+if p:
+    print("实现")
+'''
+
+'''
+# ---------------------遍历操作---------------------
+# __getitem__方法：
+# class Person:
+#     def __init__(self):
+#         self.result = 1
+#
+#     def __getitem__(self, item):
+#         self.result += 1
+#         if self.result >= 10:
+#             raise StopIteration("遍历终止")# 抛出异常终止程序运行
+#         else:
+#             return self.result
+#
+# p = Person()
+#
+# for i in p:
+#     print(i)
+
+# __iter__方法：
+class Person:
+    def __init__(self):
+        self.result = 1
+
+    # def __getitem__(self, item):
+    #     print("运行getitem")
+    #     self.result += 1
+    #     if self.result >= 10:
+    #         raise StopIteration("遍历终止")# 抛出异常终止程序运行
+    #     else:
+    #         return self.result
+
+    def __iter__(self):
+        # print("运行iter")
+        # return iter([1, 2, 3, 4, 5])# 返回迭代器对象
+        return self# 要返回实例，并且使它成为迭代器，要结合下面的next方法来实现
+
+    def __next__(self):
+        self.result += 1
+        if self.result >= 10:
+            raise StopIteration("终止遍历")
+        else:
+            return self.result
+
+
+p = Person()
+
+# 同时有iter和getitem时，会发现调用了iter方法，所以，iter方法的优先级比getitem高
+
+# for i in p:
+#     print(i)
+# 当遍历实例对象时，先调用iter方法针对实例p去计算其中的迭代器，而这个本质就是调用这个iter方法
+# 而拿到迭代器之后会调用next函数方法去获取下一个数据，直到获取完毕抛出raise StopIteration
+
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))
+print(next(p))# 下一项已经终止
+'''
+
+'''
+# ---------------------回复迭代器初始值---------------------
+
+class Person:
+    def __init__(self):
+        self.age = 1
+
+    def __iter__(self):
+        self.age = 1
+        return self
+
+    def __next__(self):
+        self.age += 1
+        if self.age >= 6:
+            raise StopIteration("stop")
+        else:
+            return self.age
+
+p = Person()
+
+# for i in p:
+#     print(i)
+# print(p.age)# 会发现迭代完之后age已经变为6了
+#
+# for i in p:# 迭代器无法重复使用，要想重复现在这个遍历功能，就得把数据进行初始化设置如在__iter__里设置self.age = 1
+#     print(i)
+
+import collections
+print(isinstance(p, collections.Iterator))# 判断这个迭代器是否在这个模块里面
+# 若去掉__iter__和__next__方法，该返回值为False，表明迭代器必须要实现这两个方法
+print(isinstance(p, collections.Iterable))# 判断是否为迭代对象
+# 以上两者说明，可迭代对象必须有iter方法，而迭代器必须同时得有这两种方法
+# 一个可迭代对象一定能通过for in来进行访问，而可通过for in来进行遍历的，不一定是一个可迭代对象
+'''
+
+'''
+# ---------------------iter函数的使用---------------------
+class Person:
+    def __init__(self):
+        self.age = 1
+
+    def __iter__(self):
+        self.age = 1
+        return self
+
+    def __next__(self):
+        self.age += 1
+        if self.age >= 6:
+            raise StopIteration("stop")
+        else:
+            return self.age
+
+    def __call__(self, *args, **kwargs):
+        self.age += 1
+        if self.age >= 6:
+            raise StopIteration("stop")
+        else:
+            return self.age
+
+p = Person()
+
+# pt = iter(p)
+# print(pt is p)
+# pt = iter(p.__next__, 4)# 判断为4时就不进行后面的输出了
+pt = iter(p, 4)# 用call方法实现上面的判断操作，就不用p.__next__
+
+for i in pt:
+    print(i)
+'''
+
+'''
+# ---------------------描述器_定义方式1---------------------
+class Person:
+    def __init__(self):
+         self.__age = 18
+
+    # @property
+    def get_age(self):
+        return self.__age
+
+    # @方法名称.setter
+    def set_age(self, value):
+        if value < 0:
+            value = 0
+        self.__age = value
+
+    # @方法名称.deleter
+    def del_age(self):
+        del self.__age
+
+    age = property(get_age, set_age, del_age)# 此时age就是一个描述器;
+    # 如果不想用这样的方式也可以用上面的@property、@方法名称.setter、@方法名称.deleter装饰器也可以实现，只是把get_age等方法的名字都写成age就可以实现同样的效果
+
+p = Person()
+
+# p.set_age(-10)
+# print(p.get_age())
+# p.del_age()
+# 以上的曾删改查属性都变成了在调用各种不同的方法，但是想以操作属性的方式来操作这里的私有属性，就得用描述器，方式为property
+
+# p.age = 19
+# print(p.age)
+# del p.age
+# print(p.age)
+
+help(Person)
+'''
+
+'''
+# ---------------------描述器_定义方式2---------------------
+class Age:
+    def __get__(self, instance, owner):
+        print("运行get")
+
+    def __set__(self, instance, value):
+        print("运行set")
+
+    def __delete__(self, instance):
+        print("运行delete")
+
+class Person:
+    age = Age()# 将上面描述器专门的类付给age，则此时的age就是一个描述器
+    # def __init__(self):
+    #      self.__age = 18
+    #
+    # # @property
+    # def get_age(self):
+    #     return self.__age
+    #
+    # # @方法名称.setter
+    # def set_age(self, value):
+    #     if value < 0:
+    #         value = 0
+    #     self.__age = value
+    #
+    # # @方法名称.deleter
+    # def del_age(self):
+    #     del self.__age
+    #
+    # age = property(get_age, set_age, del_age)
+
+p = Person()
+
+p.age = 19
+print(p.age)
+del p.age
+# 运行会发现，描述器所具备的三种方法都运行了
+# 描述器必须具备set，get，delete这三种方法
+'''
+
+'''
+# ---------------------描述器_调用细节---------------------
+class Age:
+    def __get__(self, instance, owner):
+        print("运行get")
+
+    def __set__(self, instance, value):
+        print("运行set")
+
+    def __delete__(self, instance):
+        print("运行delete")
+
+class Person:
+    age = Age()
+
+p = Person()
+
+p.age = 19
+print(p.age)
+del p.age
+
+# print(Person.age)
+# Person.age = 19
+# del Person.age
+# 会发现只有查找操作调用了描述器里的get方法，修改和删除都没有调用
+# 因此以后调用描述器都是使用实例来进行调用，不用类进行调用
+'''
+
+'''
+# ---------------------描述器_值的存储问题---------------------
+class Age:
+    def __get__(self, instance, owner):
+        print("运行get")
+        # return self.v
+        return instance.v
+
+    def __set__(self, instance, value):
+        print("运行set", self, instance, value)# 会发现，self为Age类，instance为Person，value为下面实例的属性修改值
+        # self.v = value
+        instance.v = value
+
+    def __delete__(self, instance):
+        print("运行delete")
+
+class Person:
+    age = Age()
+
+p = Person()
+p.age = 19
+print(p.age)
+# del p.age
+
+p2 = Person()
+p2.age = 22
+print(p2.age)
+
+print(p.age)# 会发现p.age的值被覆盖了，原因是p和p2都是共享这个age，任何一方修改都会影响另一个
+# 因此要让不同的实例拥有不同的数据，上面修改以及返回值不能绑定在self上，因为上面self为Age，也是下面赋值给的age，是共享的
+# 所以应该绑定在instance上，instance为Person，也是赋值给的p和p2实例
+# 将上面绑定的self修改之后，就不会出现覆盖的情况了
+'''
+
+'''
+# ---------------------使用类，实现装饰器---------------------
+# 普通方式：
+# def check(func):
+#     def inner():
+#         print("登录验证")
+#         func()
+#     return inner
+#
+# # @check
+# def fashuoshuo():
+#     print("发说说")
+#
+# fashuoshuo = check(fashuoshuo)# 等同于@check
+# fashuoshuo()
+
+# 使用类实现：
+class Check:
+    def __init__(self, func):
+        self.f = func
+
+    def __call__(self, *args, **kwargs):
+        print("登录验证")
+        self.f()
+
+# @Check
+def fashuoshuo():
+    print("发说说")
+
+fashuoshuo = Check(fashuoshuo)# 这里的fashuoshuo是由Check类产生的实例对象，会调用初始化__init__方法，并将fashuoshuo传递给__init__方法中的func
+# 这里如果不用上面这种方法，而用@Check，效果一样等同
+
+fashuoshuo()# 此处表示要调用实例对象，实例对象要用必须用到__call__方法
+'''
+
+'''
+# ---------------------几个监听对象的生命周期方法---------------------
+class Person:
+    # def __new__(cls, *args, **kwargs):
+    #     print("创建了一个新对象，但是被我拦截了！")
+
+    def __init__(self):
+        print("初始化方法")
+        self.name = "sz"
+
+    def __del__(self):
+        print("这个对象被释放了")
+
+p = Person()
+print(p)
+del p
+print(p.name)
+'''
+
+'''
+# ---------------------几个监听对象的生命周期方法_小案例---------------------
+# Person，打印一下当前时刻由Person类产生的实例有多少个
+# 如果创建一个实例，计数 + 1，删除一个实例，计数 - 1
+
+class Person:
+    __personCount = 0
+    def __init__(self):
+        print("计数 + 1")
+        Person.__personCount += 1
+
+    def __del__(self):
+        print("计数 - 1")
+        self.__class__.__personCount -= 1# self.__class__.__personCount与上面的Person.__personCount一样
+
+    # @staticmethod
+    # def log():
+    #     print("当前的人的个数是%d个" % Person.__personCount)
+
+    @classmethod
+    def log(cls):
+        print("当前的人的个数是%d个" % cls.__personCount)# 该类方法等同于上面的静态方法
+
+p = Person()
+p2 = Person()
+Person.log()
+del p
+del p2
+Person.log()
+'''
+
+'''
+# ---------------------Python内存管理---------------------
+class Person:
+    pass
+
+# 实例
+p = Person()
+# print(p)
+# print(id(p))# 返回p内存地址的十进制
+# print(hex(id(p)))# 返回p内存地址的十六进制
+p2 = Person()
+print(id(p), id(p2))
+
+# 整数或短小的字符
+num1 = 10
+num2 = 4
+print(id(num1), id(num2))# 一样，对于整数和短小的字符，Python会进行缓存，不会创建多个相同的对象
+'''
+
+'''
+# ---------------------引用计数器---------------------
+import sys
+
+class Person:
+    pass
+
+p1 = Person()# 1
+print(sys.getrefcount(p1))# 输出引用数会大一，这点注意
+p2 = p1# 2
+print(sys.getrefcount(p1))
+del p2# 1
+print(sys.getrefcount(p1))
+del p1# 0
+print(sys.getrefcount(p1))# 会报错，因为已经没有引用了，内存会自动释放掉，故不会输出
+'''
+
+'''
+# ---------------------引用计数器+1 -1的场景举例---------------------
+import sys
+
+class Person:
+    pass
+
+p = Person()# 1
+print(sys.getrefcount(p))
+
+# def log(obj):# 3
+#     print(sys.getrefcount(obj))
+#
+# log(p)# 会发现+2了，因为当我们尝试把一个实例传给一个函数的时候，这个函数对象的内部有两个属性来引用这给实例，所以会自动+2
+
+l = [p]# 1
+print(sys.getrefcount(p))# 对象作为一个元素，存储在容器中会自动+1
+'''
+
+'''
+# ---------------------引用计数机制_特殊场景_循环引用问题---------------------
+# 内存管理机制 = 引用计数器机制 + 垃圾回收机制
+class Person:
+    pass
+
+class Dog:
+    pass
+
+p = Person()
+d = Dog()
+
+p.pet = d
+d.master = p
+
+# 删除p,d之后对应的对象是否被释放掉
+del p
+del d
+# objgraph库可以用objgraph.count("对象")可以查看,垃圾回收器,跟踪对象的个数
+'''
+
+'''
+# ---------------------垃圾回收机制触发时机---------------------
+# 自动回收
+import gc
+
+gc.disable()
+print(gc.isenabled())
+
+gc.enable()
+print(gc.isenabled())
+
+print(gc.get_threshold())
+gc.set_threshold(100, 15, 5)
+
+# 手动回收
+# import objgraph
+
+class Person:
+    pass
+
+class Dog:
+    pass
+
+p = Person()
+d = Dog()
+
+p.pet = d
+d.master = p
+
+del p
+del d
+
+gc.disable()
+gc.collect()
+
+# print(objgraph.count("Person"))
+# print(objgraph.count("Dog"))
+'''
+
+'''
+# ---------------------综合案例---------------------
+
+# 计算器，实现一些基本的操作，加减乘除运算，以及打印结果操作
+
+# ----面向过程(代码1)----
+# def jia(a, b):
+#     return a + b
+#
+# def jian(a, b):
+#     return a - b
+#
+# def cheng(a, b):
+#     return a * b
+#
+# def chu(a, b):
+#     return a / b
+#
+# # result = jia(2, 4)
+# # result2 = cheng(5, 4)
+# # print(result)
+# # print(result2)
+#
+# # 实现(2 + 6 - 4) * 5
+# r1 = jia(2, 6)
+# r2 = jian(r1, 4)
+# r3 = cheng(r2, 5)
+# print(r3)
+
+# ----面向过程(代码2)----
+# result = 0
+#
+# def first_value(v):
+#     global result
+#     result = v
+#
+# def jia(n):
+#     global result
+#     result += n
+#
+# def jian(n):
+#     global result
+#     result -= n
+#
+# def cheng(n):
+#     global result
+#     result *= n
+#
+# def chu(n):
+#     global result
+#     result /= n
+#
+# # 实现(2 + 6 - 4) * 5
+# first_value(2)
+# jia(6)
+# jian(4)
+# cheng(5)
+# print(result)
+
+# ----面向对象(代码3)----
+# class Calculator:
+#     __result = 0
+#     @classmethod
+#     def first_value(cls, v):
+#         cls.__result = v
+#
+#     @classmethod
+#     def jia(cls, n):
+#         cls.__result += n
+#
+#     @classmethod
+#     def jian(cls, n):
+#         cls.__result -= n
+#
+#     @classmethod
+#     def cheng(cls, n):
+#         cls.__result *= n
+#
+#     @classmethod
+#     def chu(cls, n):
+#         cls.__result /= n
+#
+#     @classmethod
+#     def show(cls):
+#         print("计算的结果是：%d" % cls.__result)
+#
+# # 实现(2 + 6 - 4) * 5
+# Calculator.first_value(2)
+# Calculator.jia(6)
+# Calculator.jian(4)
+# Calculator.cheng(5)
+# Calculator.show()
+
+# ----面向对象(代码4)----
+# class Calculator:
+#
+#     def __init__(self, num):
+#        self.__result = num
+#
+#     def jia(self, n):
+#         self.__result += n
+#
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码5)----
+# class Calculator:
+#
+#     def check_number(self, num):
+#         if not isinstance(num, int):
+#             raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#
+#     def __init__(self, num):
+#         self.check_number(num)
+#         self.__result = num
+#
+#     def jia(self, n):
+#         self.check_number(n)
+#         self.__result += n
+#
+#     def jian(self, n):
+#         self.check_number(n)
+#         self.__result -= n
+#
+#     def cheng(self, n):
+#         self.check_number(n)
+#         self.__result *= n
+#
+#     def chu(self, n):
+#         self.check_number(n)
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码6)----
+# class Calculator:
+#
+#     def check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     @check_num_zsq
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @check_num_zsq
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @check_num_zsq
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @check_num_zsq
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @check_num_zsq
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码7)----
+# class Calculator:
+#
+#     def __check_num_zsq(func):# 改成私有的以防止外界调用出错
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     @__check_num_zsq
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码8)----
+
+# # 1.创建一个播报器对象
+# import win32com.client# 用pip下载pypiwin32模块就可以用了
+# speaker = win32com.client.Dispatch("SAPI.SpVoice")
+# # 2.通过这个播报器对象，直接播报相应的字符串就可以
+# speaker.Speak("我的名字是sz")
+#
+# class Calculator:
+#
+#     def __check_num_zsq(func):# 改成私有的以防止外界调用出错
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     @__check_num_zsq
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码9)----
+# 方式一：
+# import win32com.client
+# speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#
+# class Calculator:
+#
+#     def __check_num_zsq(func):# 改成私有的以防止外界调用出错
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     @__check_num_zsq
+#     def __init__(self, num):
+#         speaker.Speak(num)
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     def jia(self, n):
+#         speaker.Speak(n)
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     def jian(self, n):
+#         speaker.Speak(n)
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     def cheng(self, n):
+#         speaker.Speak(n)
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     def chu(self, n):
+#         speaker.Speak(n)
+#         self.__result /= n
+#
+#     def show(self):
+#         speaker.Speak("计算的结果是：%d" % self.__result)
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+#方式二：
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __say(self, word):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak(word)
+#
+#     def __check_num_zsq(func):# 改成私有的以防止外界调用出错
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     @__check_num_zsq
+#     def __init__(self, num):
+#         self.__say(num)
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     def jia(self, n):
+#         self.__say(n)
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     def jian(self, n):
+#         self.__say(n)
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     def cheng(self, n):
+#         self.__say(n)
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     def chu(self, n):
+#         self.__say(n)
+#         self.__result /= n
+#
+#     def show(self):
+#         self.__say("计算的结果是：%d" % self.__result)
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码10)----
+# 代码过于冗杂
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     def __say_zsq(func):
+#         def inner(self, n):
+#             speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#             speaker.Speak(n)
+#             return func(self, n)
+#         return inner
+#
+#     def __say_zsq_jia(func):
+#         def inner(self, n):
+#             speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#             speaker.Speak("加%d" % n)
+#             return func(self, n)
+#         return inner
+#
+#     def __say_zsq_jian(func):
+#         def inner(self, n):
+#             speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#             speaker.Speak("减%d" % n)
+#             return func(self, n)
+#         return inner
+#
+#     def __say_zsq_cheng(func):
+#         def inner(self, n):
+#             speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#             speaker.Speak("乘%d" % n)
+#             return func(self, n)
+#         return inner
+#
+#     def __say_zsq_chu(func):
+#         def inner(self, n):
+#             speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#             speaker.Speak("除%d" % n)
+#             return func(self, n)
+#         return inner
+#
+#     @__check_num_zsq
+#     @__say_zsq# 这里出现了装饰器嵌套，根据执行逻辑来看，因该时先执行判断在播报语音，因此@__say_zsq在@__check_num_zsq后面
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     @__say_zsq_jia
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     @__say_zsq_jian
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     @__say_zsq_cheng
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     @__say_zsq_chu
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码11)----
+# 优化(可传参装饰器)
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     def __creat_say_zsq(word=""):# 可传参装饰器，而且这里设置word为空字符串，是为了前面init数值时只需要说数，而后面的方法只需要传入相应要说的字就可以
+#         def __say_zsq(func):
+#             def inner(self, n):
+#                 speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#                 speaker.Speak(word + str(n))
+#                 return func(self, n)
+#             return inner
+#         return __say_zsq
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("")
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("加")
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("减")
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("乘")
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("除")
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码12)----
+# 完善最后的播报功能
+# 方法一：
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __say(self, word):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak(word)
+#
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     def __creat_say_zsq(word=""):
+#         def __say_zsq(func):
+#             def inner(self, n):
+#                 speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#                 speaker.Speak(word + str(n))
+#                 return func(self, n)
+#             return inner
+#         return __say_zsq
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("")
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("加")
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("减")
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("乘")
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("除")
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak("计算的结果是：%d" % self.__result)
+#         # 但是这种方法如果不适用win时，而你又写了很多这样的代码，一个一个修改太麻烦，可以用下面的方法二
+#         print("计算的结果是：%d" % self.__result)
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# 方法二(直接使用函数调用)：
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __say(self, word):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak(word)
+#
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     def __creat_say_zsq(word=""):# 可传参装饰器，而且这里设置word为空字符串，是为了前面init数值时只需要说数，而后面的方法只需要传入相应要说的字就可以
+#         def __say_zsq(func):
+#             def inner(self, n):
+#                 speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#                 # speaker.Speak(word + str(n))
+#                 self.__say(word + str(n))# 播报不用上面那条，直接调用__say方法来播报也行，这样所有的方法都可以联系起来了
+#                 return func(self, n)
+#             return inner
+#         return __say_zsq
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("")
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("加")
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("减")
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("乘")
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("除")
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         self.__say("计算的结果是：%d" % self.__result)
+#         print("计算的结果是：%d" % self.__result)
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+
+# ----面向对象(代码13)----
+# 小补充，外界直接读取result数据
+# import win32com.client
+#
+# class Calculator:
+#
+#     def __say(self, word):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak(word)
+#
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+#
+#     def __creat_say_zsq(word=""):# 可传参装饰器，而且这里设置word为空字符串，是为了前面init数值时只需要说数，而后面的方法只需要传入相应要说的字就可以
+#         def __say_zsq(func):
+#             def inner(self, n):
+#                 speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#                 # speaker.Speak(word + str(n))
+#                 self.__say(word + str(n))# 播报不用上面那条，直接调用__say方法来播报也行，这样所有的方法都可以联系起来了
+#                 return func(self, n)
+#             return inner
+#         return __say_zsq
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("")
+#     def __init__(self, num):
+#         self.__result = num
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("加")
+#     def jia(self, n):
+#         self.__result += n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("减")
+#     def jian(self, n):
+#         self.__result -= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("乘")
+#     def cheng(self, n):
+#         self.__result *= n
+#
+#     @__check_num_zsq
+#     @__creat_say_zsq("除")
+#     def chu(self, n):
+#         self.__result /= n
+#
+#     def show(self):
+#         self.__say("计算的结果是：%d" % self.__result)
+#         print("计算的结果是：%d" % self.__result)
+#
+#     @property
+#     def result(self):
+#         return self.__result
+#
+#
+# # 实现(2 + 6 - 4) * 5
+# c1 = Calculator(2)
+#
+# c1.jia(6)
+# c1.jian(4)
+# c1.cheng(5)
+# c1.show()
+# print(c1.result)
+
+# ----面向对象(代码14)----
+# 用链式编程
+# 清零功能
+# import win32com.client
+# 
+# class Calculator:
+# 
+#     def __say(self, word):
+#         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#         speaker.Speak(word)
+# 
+#     def __check_num_zsq(func):
+#         def inner(self, n):
+#             if not isinstance(n, int):
+#                 raise TypeError("当前这个数据的类型有问题，因该是一个整型数据")
+#             return func(self, n)
+#         return inner
+# 
+#     def __creat_say_zsq(word=""):# 可传参装饰器，而且这里设置word为空字符串，是为了前面init数值时只需要说数，而后面的方法只需要传入相应要说的字就可以
+#         def __say_zsq(func):
+#             def inner(self, n):
+#                 speaker = win32com.client.Dispatch("SAPI.SpVoice")
+#                 # speaker.Speak(word + str(n))
+#                 self.__say(word + str(n))# 播报不用上面那条，直接调用__say方法来播报也行，这样所有的方法都可以联系起来了
+#                 return func(self, n)
+#             return inner
+#         return __say_zsq
+# 
+#     @__check_num_zsq
+#     @__creat_say_zsq("")
+#     def __init__(self, num):
+#         self.__result = num
+# 
+#     @__check_num_zsq
+#     @__creat_say_zsq("加")
+#     def jia(self, n):
+#         self.__result += n
+#         return self# 直接返回实例对象本身
+# 
+#     @__check_num_zsq
+#     @__creat_say_zsq("减")
+#     def jian(self, n):
+#         self.__result -= n
+#         return self# 直接返回实例对象本身
+# 
+#     @__check_num_zsq
+#     @__creat_say_zsq("乘")
+#     def cheng(self, n):
+#         self.__result *= n
+#         return self# 直接返回实例对象本身
+# 
+#     @__check_num_zsq
+#     @__creat_say_zsq("除")
+#     def chu(self, n):
+#         self.__result /= n
+#         return self# 直接返回实例对象本身
+# 
+#     def show(self):
+#         self.__say("结果是：%d" % self.__result)
+#         print("结果是：%d" % self.__result)
+#         return self# 直接返回实例对象本身
+# 
+#     def clear(self):# 清零功能
+#         self.__result = 0
+#         self.__say("清除后的结果是：%d" % self.__result)
+#         return self
+# 
+#     @property
+#     def result(self):
+#         return self.__result
+# 
+# 
+# # 实现(2 + 6 - 4) * 5
+# # c1 = Calculator(2)
+# # c1.jia(6).jian(4).cheng(5).show()# 通过上面直接返回实例对象本身，这里就可以实现这样的链式编码来调用方法，这样更爽
+# # print(c1.result)
+# 
+# # c2 = Calculator(10)
+# # c2.jia(6).jian(4).cheng(5).jia(555).show()
+# # print(c2.result)
+# 
+# c3 = Calculator(5)
+# c3.jia(4).jian(3).cheng(6).jia(666).show().clear().show()
+# print(c3.result)
+'''
+
+'''
+# ---------------------继承及type和object的区别---------------------
+class Animal:
+    pass
+
+class Dog:
+    pass
+
+class xxx(Animal, Dog):
+    """
+    多继承
+    """
+    pass
+
+d = Dog()
+print(d.__class__)
+print(Dog.__class__)
+print(type.__class__)
+print(object.__class__)
+
+# print(Dog.__bases__)
+# print(xxx.__bases__)
+# print(int.__bases__)
+# print(float.__bases__)
+# print(bool.__bases__)
+
+# 由上面可以看出，type元类创建所有的类对象，object也是由type创建的类对象，而所有的类又都继承object，type也继承object
+'''
+
+'''
+# ---------------------继承_资源---------------------
+class Animal:
+    # 属性和方法
+    # 设置不同权限的属性和方法，继承当中进行测试
+    # 在子类当中，能否访问到这些资源
+    a = 1
+    _b = 2
+    __c = 3
+
+    def t1(self):
+        print("t1")
+
+    def _t2(self):
+        print("t2")
+
+    def __t3(self):
+        print("t3")
+
+    def __init__(self):
+        print("init, animal")
+
+class Person(Animal):
+    def test(self):
+        print(self.a)
+        print(self._b)
+        # print(self.__c)# 报错，
+
+        self.t1()
+        self._t2()
+        # self.__t3()# 报错，
+        self.__init__()
+
+p = Person()
+p.test()
+'''
+
+'''
+# ---------------------继承_资源的访问顺序---------------------
+
+# 单继承：
+# class C:
+#     age = "c"
+#     pass
+#
+# class B(C):
+#     # age = "b"
+#     pass
+#
+# class A(B):
+#     # age = "a"
+#     pass
+#
+# # A -> B -> C
+# print(A.age)
+
+# 无重叠的多继承：
+# class E:
+#     age = "e"
+#     pass
+#
+# class D:
+#     # age = "d"
+#     pass
+#
+# class C(E):
+#     # age = "c"
+#     pass
+#
+# class B(D):
+#     # age = "b"
+#     pass
+#
+# class A(B, C):
+#     # age = "a"
+#     pass
+#
+# # A -> B -> D -> C -> E
+# print(A.age)# 遵循深度优先，先左后右原则
+
+# 有重叠的多继承：
+class D:
+    age = "d"
+    pass
+
+class C(D):
+    # age = "c"
+    pass
+
+class B(D):
+    # age = "b"
+    pass
+
+class A(B, C):
+    # age = "a"
+    pass
+
+# A -> B -> C -> D
+print(A.age)# 遵循深度优先，先左后右原则
+'''
+
+'''
+# ---------------------继承_资源的覆盖---------------------
+class D(object):
+    age = "d"
+    pass
+
+class C(D):
+    age = "c"
+    def test(self):
+        print("c")
+    pass
+
+class B(D):
+    age = "b"
+    def test(self):
+        # print("b")
+        print(self)
+    @classmethod
+    def test2(cls):
+        print(cls)
+    pass
+
+class A(B, C):
+    # age = "a"
+    pass
+
+# print(A.mro())# 输出资源查找顺序
+#
+# print(A.age)# 此时输出为b，可以理解为age = "b"把age = "d"给覆盖了，但是不能说age = "b"把age = "c"覆盖，因为B类继承的是D类
+# print(A().test())# 说明，方法也是可以被覆盖的
+
+A.test2()
+a = A()
+A().test()
+# 由此看出，虽然方法在B类里面，但是由谁调用这方法，到时候传递过去的就是哪个方法
+'''
+
+'''
+# ---------------------继承_资源的累加_1---------------------
+class B:
+    a = 1
+    def __init__(self):
+        self.b = 2
+
+    def t1(self):
+        print("t1")
+
+    @classmethod
+    def t2(cls):
+        print("t2")
+
+    @staticmethod
+    def t3():
+        print("t3")
+
+class A(B):
+    c = 3
+    def __init__(self):
+        self.e = "666"
+
+    def tt1(self):
+        print("t1")
+
+    @classmethod
+    def tt2(cls):
+        print("t2")
+
+    @staticmethod
+    def tt3():
+        print("t3")
+    pass
+
+a_obj = A()
+print(A.a)# A类没有，通过继承直接访问到B类的a属性
+print(a_obj.b)# A类没有，则通过继承访问到上面的init方法，但是这里是给a_obj对象创建了一个新的属性，不像上面访问同一个
+a_obj.t1()
+A.t2()
+A.t3()
+
+print(A.c)
+a_obj.d = "xxx"
+print(a_obj.d)
+a_obj.tt1()
+A.tt2()
+A.tt3()
+# 在继承的基础上还可以给自己的类增加新的属性和方法
+print(a_obj.e)
+# 此时报错，但是不是这里而是上面的print(a_obj.b)，因为已经创建了A类自己的init初始化方法，便不会再去自动调用B类里的init，所以A类的实例里
+# 就不含有吧b属性，因此就报错，所以我们想要实现print(a_obj.b)就必须得手动调用B类的init方法
+'''
+
+'''
+# ---------------------继承_资源的累加_2---------------------
+# 改善，使得a_obj增加B类的b属性，甚至更多的属性
+class B:
+    a = 1
+
+    def __init__(self):
+        self.b = 2
+        self.xxx = "xxx"
+
+    def t1(self):
+        print("t1")
+
+    @classmethod
+    def t2(cls):
+        print("t2")
+
+    @staticmethod
+    def t3():
+        print("t3")
+
+class A(B):
+    c = 3
+
+    def __init__(self):
+        self.e = "666"
+        B.__init__(self)# 此时传过来的self就是A的实例，从而调用B类的init让A类的实例产生新的同B类里的属性
+
+    def tt1(self):
+        print("t1")
+
+    @classmethod
+    def tt2(cls):
+        print("t2")
+
+    @staticmethod
+    def tt3():
+        print("t3")
+    pass
+
+a_obj = A()
+print(A.a)
+print(a_obj.b)
+a_obj.t1()
+A.t2()
+A.t3()
+
+print(A.c)
+a_obj.tt1()
+A.tt2()
+A.tt3()
+print(a_obj.e)
+# 此时就可以实现print(a_obj.b)
+
+print(a_obj.__dict__)
+# 并且查看a_obj所有属性，会发现B类实例有的属性，A类的实例a_obj也创建了新的相同的属性
+'''
+
+'''
+# ---------------------继承_资源的累加_2_存在问题---------------------
+# 如菱形继承，又可能出现代码重复调用的问题
+class D(object):
+    def __init__(self):
+        print("d")
+
+class B(D):
+    def __init__(self):
+        D.__init__(self)
+        print("b")
+
+class C(D):
+    def __init__(self):
+        D.__init__(self)
+        print("c")
+
+class A(B, C):
+    def __init__(self):
+        B.__init__(self)
+        C.__init__(self)
+        print("a")
+
+# B()
+# C()
+A()# 此时会发现，调用A类的init时，会调用B和C的init，同时B和C中都含有D.__init__(self)，因此重复调用，打印了两次d
+'''
+
+'''
+# ---------------------继承_资源的累加_super使用---------------------
+# class B:
+#     a = 1
+#
+#     def __init__(self):
+#         self.b = 2
+#         self.xxx = "xxx"
+#
+#     def t1(self):
+#         print("t1")
+#
+#     @classmethod
+#     def t2(cls):
+#         print("t2")
+#
+#     @staticmethod
+#     def t3():
+#         print("t3")
+#
+# class A(B):
+#     c = 3
+#
+#     def __init__(self):
+#         self.e = "666"
+#         # super(A, self).__init__()# 此时将self传给上面B类的init
+#         super().__init__()# 这种写法也可以实现，但是仅限于python3版本之后
+#
+#     def tt1(self):
+#         print("t1")
+#
+#     @classmethod
+#     def tt2(cls):
+#         super(A, cls).t2()# 此时将cls传给上面B类的t2()
+#         print("t2")
+#
+#     @staticmethod
+#     def tt3():
+#         print("t3")
+#     pass
+#
+# a_obj = A()
+# print(A.a)
+# print(a_obj.b)
+# a_obj.t1()
+# A.t2()
+# A.t3()
+
+# print(A.c)
+# a_obj.tt1()
+# A.tt2()
+# A.tt3()
+# print(a_obj.e)
+
+# 如菱形继承
+class D(object):
+    def __init__(self):
+        print("d")
+
+class B(D):
+    def __init__(self):
+        super().__init__()
+        print("b")
+
+class C(D):
+    def __init__(self):
+        super().__init__()
+        print("c")
+
+class A(B, C):
+    def __init__(self):
+        # B.__init__(self)
+        # C.__init__(self)
+        super().__init__()
+        print("a")
+
+# B()
+# C()
+A()# 通过super将问题解决了
+'''
+
+'''
+# ---------------------继承_资源的累加_super使用注意事项1---------------------
+class D(object):
+    def __init__(self):
+        print("d")
+
+class B(D):
+    def __init__(self):
+        # super(B, self).__init__()# 用这种写法时以一个参数要与所在的类名相同，所以修改类名时这里的也要修改，而下面的方法
+        super(self.__class__, self).__init__()# 你以为这样就避免了修改类名时操作繁琐的问题，但是在传参时传递的是A()，则A().__class__为A，从而报错
+        # 所以不能这样写
+        print("b")
+
+class C(D):
+    def __init__(self):
+        # super(C, self).__init__()
+        super(self.__class__, self).__init__()
+        print("c")
+
+class A(B, C):
+    def __init__(self):
+        # B.__init__(self)
+        # C.__init__(self)
+        super().__init__()
+        print("a")
+
+# B()
+# C()
+A()
+'''
+
+'''
+# ---------------------继承_资源的累加_super使用注意事项2---------------------
+class D(object):
+    def __init__(self):
+        print("d")
+
+class B(D):
+    def __init__(self):
+        super().__init__()
+        print("b")
+
+class C(D):
+    def __init__(self):
+        super().__init__()
+        print("c")
+
+class A(B, C):
+    def __init__(self):
+        B.__init__(self)
+        C.__init__(self)
+        print("a")
+
+A()# 会发现c和d输出了两次，因为同时用super和类调用的方法，在传递的关系中会发现，A和B两个都传了参数给C，因此C类的init执行了两次
+print(A.mro())
+# 所以不要把通过类名去调用其他资源和通过super去调用其他类的资源混合使用
+'''
+
+'''
+# ---------------------多态---------------------
+class Animal:
+    def jiao(self):
+        pass
+
+class Dog(Animal):
+    def jiao(self):
+        print("汪汪汪")
+
+class Cat(Animal):
+    def jiao(self):
+        print("喵喵喵")
+
+def test(obj):
+    obj.jiao()
+
+d = Dog()
+c = Cat()
+test(c)
+'''
+
+'''
+# ---------------------多态_抽象---------------------
+import abc
+
+class Animal(metaclass=abc.ABCMeta):
+    """
+    此时该类为抽象类，不能直接去调用
+    """
+    @abc.abstractmethod# 此时，该方法jiao是抽象方法
+    def jiao(self):
+        pass
+
+    @abc.abstractclassmethod# 抽象类方法
+    def test(cls):
+        pass
+
+class Dog(Animal):# 这个类继承了上面的抽象类，所以要实现jiao方法，该Animal的子类Dog里必须要有这个jiao方法
+    def jiao(self):
+        print("汪汪汪")
+
+    @classmethod# 与上面的实例方法一样，该类继承了抽象类，则该类里面必须有上面抽象类里的抽象类方法才可以调用
+    def test(cls):
+        print("xxx")
+
+class Cat(Animal):
+    def jiao(self):
+        print("喵喵喵")
+
+d = Dog()
+d.jiao()
+d.test()
+
+c = Cat()
+c.jiao()
+c.test()# 报错，因为Cat继承了Animal抽象类，而Cat类中有没有实现抽象类里的抽象类方法
+'''
+
+
+# ---------------------三大特性_案例_代码---------------------
+# 定义三个类：小猫，小狗，人
+# 小狗：姓名，年龄(默认1岁)；吃饭，玩，睡觉，看家(格式：名字是xx，年龄是xx岁的小狗在xx)
+# 小猫：姓名，年龄(默认1岁)；吃饭，玩，睡觉，捉老鼠(格式：名字是xx，年龄是xx岁的小猫在xx)
+# 人：  姓名，年龄(默认1岁)；宠物；吃饭，玩，睡觉(格式：名字是xx，年龄是xx岁的人在xx)
+#                       养宠物(让所有的宠物吃饭，玩，睡觉)
+#                       让宠物工作(让所有的宠物根据自己的职责开始工作)
+
+'''
+# 代码实现1：
+class Dog:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("名字是{}，年龄是{}岁的小狗在吃饭".format(self.name, self.age))
+
+    def play(self):
+        print("名字是{}，年龄是{}岁的小狗在玩".format(self.name, self.age))
+
+    def sleep(self):
+        print("名字是{}，年龄是{}岁的小狗在睡觉".format(self.name, self.age))
+
+    def protect(self):
+        print("名字是{}，年龄是{}岁的小狗在看家".format(self.name, self.age))
+
+d = Dog("小黑", 5)
+d.eat()
+'''
+
+'''
+# 代码实现2：
+# 简化print("名字是{}，年龄是{}岁的小狗在xxx".format(self.name, self.age))
+class Dog:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def protect(self):
+        print("%s在看家" % self)
+
+    def __str__(self):
+        """
+        :return: self对象本身字符串描述
+        """
+        return "名字是{}，年龄是{}岁的小狗".format(self.name, self.age)
+
+d = Dog("小黑", 5)
+d.eat()
+d.play()
+'''
+
+'''
+# 代码实现3：
+class Person:
+    def __init__(self, name, pets, age=1):# 切记，有默认值的参数一定要放在所有形参之后，防止传参错位
+        self.name = name
+        self.age = age
+        self.pets = pets
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def keepPets(self):
+        for pet in self.pets:
+            pet.eat()
+            pet.play()
+            pet.sleep()
+
+    def let_pets_work(self):
+        for pet in self.pets:
+            if isinstance(pet, Dog):# 通过isinstance来判断这个宠物属于哪个类，从而调用该类特有的方法
+                pet.protect()
+            if isinstance(pet, Cat):
+                pet.catch()
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的人".format(self.name, self.age)
+
+
+class Cat:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def catch(self):
+        print("%s在捉老鼠" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小猫".format(self.name, self.age)
+
+
+class Dog:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def protect(self):
+        print("%s在看家" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小狗".format(self.name, self.age)
+
+
+d = Dog("小黑", 5)
+c = Cat("小花", 3)
+p = Person("李华", [d, c], 18)
+
+p.keepPets()
+p.let_pets_work()
+'''
+
+'''
+# 代码实现4：
+class Person:
+    def __init__(self, name, pets, age=1):# 切记，有默认值的参数一定要放在所有形参之后，防止传参错位
+        self.name = name
+        self.age = age
+        self.pets = pets
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def keepPets(self):
+        for pet in self.pets:
+            pet.eat()
+            pet.play()
+            pet.sleep()
+
+    def let_pets_work(self):
+        for pet in self.pets:
+            pet.work()# 可以先将所有宠物工作的方法名称都统一成work，这样在调用时也是可以分开实现的
+            # 因为调用的实现也是根据pet遍历到的self.pets实例来调用对应于它的类的特定的work方法
+
+            # if isinstance(pet, Dog):
+            #     pet.protect()
+            # if isinstance(pet, Cat):
+            #     pet.catch()
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的人".format(self.name, self.age)
+
+
+class Cat:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def work(self):
+        print("%s在捉老鼠" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小猫".format(self.name, self.age)
+
+
+class Dog:
+    def __init__(self, name, age=1):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+    def work(self):
+        print("%s在看家" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小狗".format(self.name, self.age)
+
+
+d = Dog("小黑", 5)
+c = Cat("小花", 3)
+p = Person("李华", [d, c], 18)
+
+p.keepPets()
+p.let_pets_work()
+'''
+
+'''
+# 代码实现5：
+# 上面的代码中有很多相同且重复的代码，所以改进成利用继承的特性将相同的代码放到父类里面去
+class Animal:
+    """
+    这个父类里包含了所有类共有的属性，体现了封装特性
+    """
+    def __init__(self, name, age=1):# 切记，有默认值的参数一定要放在所有形参之后，防止传参错位
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print("%s在吃饭" % self)
+
+    def play(self):
+        print("%s在玩" % self)
+
+    def sleep(self):
+        print("%s在睡觉" % self)
+
+# 这下面的子类继承上面的父类的特性，体现了继承特性
+# 而像下面的各个类都有自己特有的方法，体现了多态的特性
+class Person(Animal):
+    def __init__(self, name, pets, age=1):
+        super(Person, self).__init__(name, age=1)
+        self.pets = pets
+
+    def keep_pets(self):
+        for pet in self.pets:
+            pet.eat()
+            pet.play()
+            pet.sleep()
+
+    def let_pets_work(self):
+        for pet in self.pets:
+            pet.work()
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的人".format(self.name, self.age)
+
+
+class Cat(Animal):
+    def work(self):
+        print("%s在捉老鼠" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小猫".format(self.name, self.age)
+
+
+class Dog(Animal):
+    def work(self):
+        print("%s在看家" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}岁的小狗".format(self.name, self.age)
+
+
+d = Dog("小黑", 5)
+c = Cat("小花", 3)
+p = Person("李华", [d, c], 18)
+
+p.keep_pets()
+p.let_pets_work()
+'''
