@@ -3074,3 +3074,100 @@ p = Person("李华", [d, c], 18)
 p.keep_pets()
 p.let_pets_work()
 '''
+
+'''
+# ---------------------作业---------------------
+# 定义三个类：学生，组长，教师
+# 学生：
+# 	（1）姓名，年龄，学号
+# 	（2）吃饭，睡觉，学习
+# 组长：
+# 	（1）姓名，年龄，学号，职务
+# 	（2）吃饭，睡觉，学习，管理
+# 教师：
+#     （1）姓名，年龄，职务
+#     （2）吃饭，睡觉，教学，管理
+
+class Unite:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        # if isinstance(self, Student):
+        #     print("名字是{}，年龄是{}，学号是{}的人在吃饭".format(self.name, self.age, self.number))
+        # elif isinstance(self, Leader):
+        #     print("名字是{}，年龄是{}，学号是{}，职务是{}的人在吃饭".format(self.name, self.age, self.number, self.position))
+        # elif isinstance(self, Teacher):
+        #     print("名字是{}，年龄是{}，职务是{}的人在吃饭".format(self.name, self.age, self.position))
+        print("%s的人在吃饭" % self)
+
+    def sleep(self):
+        # if isinstance(self, Student):
+        #     print("名字是{}，年龄是{}，学号是{}的人在睡觉".format(self.name, self.age, self.number))
+        # elif isinstance(self, Leader):
+        #     print("名字是{}，年龄是{}，学号是{}，职务是{}的人在睡觉".format(self.name, self.age, self.number, self.position))
+        # elif isinstance(self, Teacher):
+        #     print("名字是{}，年龄是{}，职务是{}的人在睡觉".format(self.name, self.age, self.position))
+        print("%s的人在睡觉" % self)
+
+
+class Student(Unite):
+    def __init__(self, name, age, number):
+        super(Student, self).__init__(name, age)
+        self.number = number
+
+    def study(self):
+        print("%s的人在学习" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}，学号是{}".format(self.name, self.age, self.number)
+
+
+class Leader(Unite):
+    def __init__(self, name, age, number, position):
+        super(Leader, self).__init__(name, age)
+        self.number = number
+        self.position = position
+
+    def study(self):
+        print("%s的人在学习" % self)
+
+    def manage(self):
+        print("%s的人在管理" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}，学号是{}，职务是{}".format(self.name, self.age, self.number, self.position)
+
+
+class Teacher(Unite):
+    def __init__(self, name, age, position):
+        super(Teacher, self).__init__(name, age)
+        self.position = position
+
+    def teach(self):
+        print("%s的人在教学" % self)
+
+    def manage(self):
+        print("%s的人在管理" % self)
+
+    def __str__(self):
+        return "名字是{}，年龄是{}，职务是{}".format(self.name, self.age, self.position)
+
+
+s = Student("小明", 18, 11)
+s.eat()
+s.sleep()
+s.study()
+
+l = Leader("李华", 19, 1, "班长")
+l.eat()
+l.sleep()
+l.study()
+l.manage()
+
+t = Teacher("芳铭", 33, "语文老师")
+t.eat()
+t.sleep()
+t.manage()
+'''
